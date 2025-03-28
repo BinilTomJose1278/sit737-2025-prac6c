@@ -44,35 +44,62 @@ app.use((req, res, next) => {
 });
 
 //Calculate function
-const calculate = (req,res,operation) =>{
+const calculate = (req, res, operation) => {
     const num1 = parseFloat(req.query.num1);
     const num2 = parseFloat(req.query.num2);
-    if (isNaN(num1) || isNaN(num2)){
-        logger.error('Invalid input : not a number');
-        return res.status(400).json({error:'Invalid input, num1 and num2 must be numbers.'})
-    }
     let result;
-    switch(operation){
-        case 'add':result = num1+num2; break;
-        case 'subtract':result = num1-num2;break;
-        case 'multiply' : result = num1*num2;break;
-        case 'divide':
-            if(num2 === 0) return res.status(400).json({error:'Cannot divide by zero.'});
-            result = num1 / num2;
-            break;
-            case 'power': result = Math.pow(num1,num2);
-            case 'modulo' : 
-            if(num2 === 0) return res.status(400).json({error: 'Cannot divide by zero.'});
-            result = num1 / num2;
-            break;
-            case 'sqrt':
-                if(num2<0) return res.status(400).json({error:'Cant get the square root of negative numbers'});
-                result = Math.sqrt(num1,num2);
 
+    switch (operation) {
+        case 'add':
+        case 'subtract':
+        case 'multiply':
+        case 'divide':
+        case 'power':
+        case 'modulo':
+            if (isNaN(num1) || isNaN(num2)) {
+                logger.error('Invalid input: num1 or num2 is not a number');
+                return res.status(400).json({ error: 'Both num1 and num2 must be numbers.' });
+            }
+            break;
+        case 'sqrt':
+            if (isNaN(num1)) {
+                logger.error('Invalid input: num1 is not a number');
+                return res.status(400).json({ error: 'num1 must be a number.' });
+            }
+            break;
     }
-    logger.info(`Operation: ${operation}, Inputs: ${num1}, ${num2}, Result: ${result}`);
+
+    switch (operation) {
+        case 'add':
+            result = num1 + num2;
+            break;
+        case 'subtract':
+            result = num1 - num2;
+            break;
+        case 'multiply':
+            result = num1 * num2;
+            break;
+        case 'divide':
+            if (num2 === 0) return res.status(400).json({ error: 'Cannot divide by zero.' });
+            result = num1 / num2;
+            break;
+        case 'power':
+            result = Math.pow(num1, num2);
+            break;
+        case 'modulo':
+            if (num2 === 0) return res.status(400).json({ error: 'Cannot perform modulo by zero.' });
+            result = num1 % num2;
+            break;
+        case 'sqrt':
+            if (num1 < 0) return res.status(400).json({ error: 'Cannot get the square root of a negative number.' });
+            result = Math.sqrt(num1);
+            break;
+    }
+
+    logger.info(`Operation: ${operation}, Inputs: num1=${num1}, num2=${num2}, Result: ${result}`);
     res.json({ result });
 };
+
 
 
 // Routes for arthimeticOperations
