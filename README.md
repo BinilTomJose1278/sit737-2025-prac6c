@@ -1,4 +1,4 @@
-# SIT737-2025-Prac6P – Kubernetes Based Calculator Microservice
+# SIT737-2025-Prac6P – Updated Kubernetes Microservice
 
 ## Overview
 
@@ -141,7 +141,60 @@ Step 9 : Test the Application
 http://<minikube-ip>:<node -port>/power?num1=2&num2=5
 
 ```
-Step 10 : Push to Github
+
+
+Step 10: Interacting with the Kubernetes Cluster
+a)Step 1: Verify the Application is Running
+
+Use the following commands to confirm your app and services are live:
+```bash
+kubectl get pods
+kubectl get services
+
+```
+
+b) Step 2 : Forward Port to Access Application
+Forward the Kubernetes service to a local port:
+```bash
+kubectl port-forward service/calculator-service 3000:80
+
+```
+
+c) Open the browser and access:
+```bash
+http://localhost:3000/power?num1=2&num2=5
+```
+
+Step 11: Updating the Application
+Step 1: Updated thr  Node.js App Code
+Step 2 : Rebuild the Docker Image
+```bash
+docker build -t biniltomjose12780/calculator-microservice:v2 .
+docker push biniltomjose12780/calculator-microservice:v2
+
+```
+
+Step 3 : Update Kubernetes Deployment
+Modify your deployment.yaml:
+```bash
+containers:
+- name: calculator
+  image: biniltomjose12780/calculator-microservice:v2
+
+```
+
+b) Apply the updated deployment:
+```bash
+kubectl apply -f k8s/deployment.yaml
+
+```
+
+c) Verify rollout:
+```bash
+kubectl rollout status deployment/calculator-deployment
+
+```
+Step 11 : Push to Github
 After verifying , add to github
 ```bash
 git add .
