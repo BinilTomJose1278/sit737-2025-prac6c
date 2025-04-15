@@ -55,6 +55,12 @@ const calculate = (req, res, operation) => {
         case 'multiply':
         case 'divide':
         case 'power':
+        case 'abs':
+        if (isNaN(num1)) {
+        logger.error('Invalid input: num1 is not a number');
+        return res.status(400).json({ error: 'num1 must be a number.' });
+        }
+         break;
         case 'modulo':
             if (isNaN(num1) || isNaN(num2)) {
                 logger.error('Invalid input: num1 or num2 is not a number');
@@ -83,9 +89,14 @@ const calculate = (req, res, operation) => {
             if (num2 === 0) return res.status(400).json({ error: 'Cannot divide by zero.' });
             result = num1 / num2;
             break;
+
         case 'power':
             result = Math.pow(num1, num2);
             break;
+        case 'abs':
+            result = Math.abs(num1);
+            break;
+    
         case 'modulo':
             if (num2 === 0) return res.status(400).json({ error: 'Cannot perform modulo by zero.' });
             result = num1 % num2;
@@ -108,6 +119,7 @@ app.get('/subtract',(req,res) => calculate(req,res,'subtract'));
 app.get('/multiply',(req,res) => calculate(req,res,'multiply'));
 app.get('/divide',(req,res) => calculate(req,res,'divide'));
 app.get('/power',(req,res) => calculate(req,res,'power'));
+app.get('/abs', (req, res) => calculate(req, res, 'abs'));
 app.get('/modulo',(req,res) => calculate(req,res,'modulo'));
 app.get('/sqrt',(req,res) => calculate(req,res,'sqrt'));
 
