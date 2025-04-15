@@ -1,4 +1,4 @@
-# SIT737-2025-Prac6P – Updated Kubernetes Microservice
+# SIT737-2025-Prac6C – Updated Kubernetes Microservice
 
 ## Overview
 
