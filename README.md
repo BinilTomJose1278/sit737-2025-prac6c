@@ -1,4 +1,4 @@
-# SIT737-2025-Prac5P – Dockerized Calculator Microservice
+# SIT737-2025-Prac6P – Kubernetes Based Calculator Microservice
 
 ## Overview
 
